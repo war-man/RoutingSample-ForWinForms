@@ -110,7 +110,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             adjacentRoadsLayer.Open();
             adjacentRoadsLayer.Columns.Add(new FeatureSourceColumn("FENAME"));
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColor.SimpleColors.LightGreen, 6));
-            adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = TextStyles.MajorRoad1("FENAME");
+            adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = WorldStreetsTextStyles.GeneralPurpose("FENAME",10);
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle.DuplicateRule = LabelDuplicateRule.UnlimitedDuplicateLabels;
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
             LayerOverlay adjacentRoadsOverlay = new LayerOverlay();
@@ -121,7 +121,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             currentRoadLayer.Open();
             currentRoadLayer.Columns.Add(new FeatureSourceColumn("FENAME"));
             currentRoadLayer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColor.SimpleColors.LightRed, 6));
-            currentRoadLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = TextStyles.MajorRoad1("FENAME");
+            currentRoadLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = WorldStreetsTextStyles.GeneralPurpose("FENAME", 10);
             currentRoadLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle.DuplicateRule = LabelDuplicateRule.UnlimitedDuplicateLabels;
             currentRoadLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
             LayerOverlay currentRoadOverlay = new LayerOverlay();

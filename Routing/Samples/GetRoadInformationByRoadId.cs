@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Forms;
-using ThinkGeo.MapSuite.Routing;
 using System.IO;
-using ThinkGeo.MapSuite;
+using System.Windows.Forms;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
+using ThinkGeo.MapSuite.Routing;
 using ThinkGeo.MapSuite.Shapes;
 using ThinkGeo.MapSuite.Styles;
 using ThinkGeo.MapSuite.WinForms;
@@ -29,32 +28,32 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void btnGetInformation_Click(object sender, EventArgs e)
         {
-            ShapeFileFeatureLayer austinstreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "Austinstreets.shp"));
-            austinstreetsLayer.Open();
+            ShapeFileFeatureLayer dallasStreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "DallasCounty-4326.shp"));
+            dallasStreetsLayer.Open();
 
-            RtgRoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "Austinstreets.rtg"));
+            RtgRoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "DallasCounty-4326.rtg"));
             routingSource.ReadEndPoints = true;
             routingSource.Open();
             RouteSegment road = routingSource.GetRouteSegmentByFeatureId(txtRoadId.Text);
             // render routeSegment information
-            RenderRoadInformation(austinstreetsLayer, road);
+            RenderRoadInformation(dallasStreetsLayer, road);
             // render adjacent routeSegments information
-            RenderAdjacentRoadsInformation(austinstreetsLayer, road);
+            RenderAdjacentRoadsInformation(dallasStreetsLayer, road);
 
-            austinstreetsLayer.Close();
+            dallasStreetsLayer.Close();
             routingSource.Close();
             winformsMap1.Refresh(new Overlay[] { winformsMap1.Overlays["currentRoadOverlay"], winformsMap1.Overlays["adjacentRoadsOverlay"] });
         }
 
-        private void RenderAdjacentRoadsInformation(ShapeFileFeatureLayer austinstreetsLayer, RouteSegment road)
+        private void RenderAdjacentRoadsInformation(ShapeFileFeatureLayer featureLayer, RouteSegment road)
         {
-            InMemoryFeatureLayer adjacentRoadsLayer = ((LayerOverlay)winformsMap1.Overlays["adjacentRoadsOverlay"]).Layers[0] as InMemoryFeatureLayer;
+            InMemoryFeatureLayer adjacentRoadsLayer = ((LayerOverlay)winformsMap1.Overlays["adjacentRoadsOverlay"]).Layers["adjacentRoadsLayer"] as InMemoryFeatureLayer;
             Collection<string> adjacentIds = road.StartPointAdjacentIds;
             foreach (string id in road.EndPointAdjacentIds)
             {
                 adjacentIds.Add(id);
             }
-            Collection<Feature> features = austinstreetsLayer.FeatureSource.GetFeaturesByIds(adjacentIds, ReturningColumnsType.AllColumns);
+            Collection<Feature> features = featureLayer.FeatureSource.GetFeaturesByIds(adjacentIds, ReturningColumnsType.AllColumns);
             adjacentRoadsLayer.InternalFeatures.Clear();
 
             foreach (Feature feature in features)
@@ -63,11 +62,11 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             }
         }
 
-        private void RenderRoadInformation(ShapeFileFeatureLayer austinstreetsLayer, RouteSegment road)
+        private void RenderRoadInformation(ShapeFileFeatureLayer featureLayer, RouteSegment road)
         {
-            InMemoryFeatureLayer currentRoadLayer = ((LayerOverlay)winformsMap1.Overlays["currentRoadOverlay"]).Layers[0] as InMemoryFeatureLayer;
+            InMemoryFeatureLayer currentRoadLayer = ((LayerOverlay)winformsMap1.Overlays["currentRoadOverlay"]).Layers["currentRoadLayer"] as InMemoryFeatureLayer;
             string featureId = road.FeatureId;
-            Feature currentRoadFeature = austinstreetsLayer.FeatureSource.GetFeatureById(featureId, ReturningColumnsType.AllColumns);
+            Feature currentRoadFeature = featureLayer.FeatureSource.GetFeatureById(featureId, ReturningColumnsType.AllColumns);
 
             currentRoadLayer.InternalFeatures.Clear();
             currentRoadLayer.InternalFeatures.Add(currentRoadFeature);
@@ -98,22 +97,25 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.7203520818787, 30.266708498581, -97.7124127431946, 30.2610436731415);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.8058, 32.7943, -96.7796, 32.7773);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
-            ShapeFileFeatureLayer austinstreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "Austinstreets.shp"));
-            austinstreetsLayer.Open();
+            ShapeFileFeatureLayer featureLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "DallasCounty-4326.shp"));
+            featureLayer.Open();
+            featureLayer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColors.LightGray, 1));
+            featureLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
 
             InMemoryFeatureLayer adjacentRoadsLayer = new InMemoryFeatureLayer();
             adjacentRoadsLayer.Open();
             adjacentRoadsLayer.Columns.Add(new FeatureSourceColumn("FENAME"));
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColor.SimpleColors.LightGreen, 6));
-            adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = WorldStreetsTextStyles.GeneralPurpose("FENAME",10);
+            adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = WorldStreetsTextStyles.GeneralPurpose("FENAME", 10);
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle.DuplicateRule = LabelDuplicateRule.UnlimitedDuplicateLabels;
             adjacentRoadsLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
             LayerOverlay adjacentRoadsOverlay = new LayerOverlay();
+            adjacentRoadsOverlay.Layers.Add("afda", featureLayer);
             adjacentRoadsOverlay.Layers.Add("adjacentRoadsLayer", adjacentRoadsLayer);
             winformsMap1.Overlays.Add("adjacentRoadsOverlay", adjacentRoadsOverlay);
 
@@ -323,7 +325,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtRoadId.Name = "txtRoadId";
             this.txtRoadId.Size = new System.Drawing.Size(116, 20);
             this.txtRoadId.TabIndex = 1;
-            this.txtRoadId.Text = "8229";
+            this.txtRoadId.Text = "58420";
             // 
             // label2
             // 

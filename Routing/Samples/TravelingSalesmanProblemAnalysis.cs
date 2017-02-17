@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Windows.Forms;
-using ThinkGeo.MapSuite.Routing;
-using System.Globalization;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using ThinkGeo.MapSuite;
+using System.Windows.Forms;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
+using ThinkGeo.MapSuite.Routing;
 using ThinkGeo.MapSuite.Shapes;
 using ThinkGeo.MapSuite.Styles;
 using ThinkGeo.MapSuite.WinForms;
@@ -26,8 +25,8 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void UserControl_Load(object sender, EventArgs e)
         {
-            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "Austinstreets.shp"));
-            routingSource = new RtgRoutingSource(Path.Combine(rootPath, "Austinstreets.rtg"));
+            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
+            routingSource = new RtgRoutingSource(Path.Combine(rootPath, "DallasCounty-4326.shortest.rtg"));
             routingEngine = new RoutingEngine(routingSource, new AStarRoutingAlgorithm(), featureSource);
 
             RenderMap();
@@ -62,10 +61,10 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.7319606824951, 30.2922109418945, -97.7002033277588, 30.269551640136);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.905564, 32.926216, -96.651506, 32.744942);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
             RoutingLayer routingLayer = new RoutingLayer();
             LayerOverlay routingOverlay = new LayerOverlay();
@@ -85,7 +84,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             InMemoryFeatureLayer routingExtentLayer = new InMemoryFeatureLayer();
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle = new AreaStyle(new GeoPen(GeoColor.SimpleColors.Green));
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
-            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.815409, 30.369949, -97.657999, 30.217922)));
+            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.080185, 33.013491, -96.465213, 32.490127)));
             routingOverlay.Layers.Add("RoutingExtentLayer", routingExtentLayer);
 
             winformsMap1.Refresh();
@@ -238,13 +237,10 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             // 
             this.lsbPoints.FormattingEnabled = true;
             this.lsbPoints.Items.AddRange(new object[] {
-            "-97.7186,30.2899",
-            "-97.7256,30.2885",
-            "-97.7295,30.2836",
-            "-97.7259,30.2750",
-            "-97.7197,30.2718",
-            "-97.7117,30.2780",
-            "-97.7161,30.2849"});
+            "-96.735022,32.850551",
+            "-96.826500,32.830000",
+            "-96.783500,32.855100",
+            "-96.780600,32.855300"});
             this.lsbPoints.Location = new System.Drawing.Point(6, 20);
             this.lsbPoints.Name = "lsbPoints";
             this.lsbPoints.Size = new System.Drawing.Size(197, 95);
@@ -283,7 +279,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtStartCoordinate.Name = "txtStartCoordinate";
             this.txtStartCoordinate.Size = new System.Drawing.Size(118, 20);
             this.txtStartCoordinate.TabIndex = 1;
-            this.txtStartCoordinate.Text = "-97.7110,30.2701";
+            this.txtStartCoordinate.Text = "-96.736022,32.860551";
             // 
             // label2
             // 

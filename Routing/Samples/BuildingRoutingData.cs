@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using ThinkGeo.MapSuite;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
 using ThinkGeo.MapSuite.Routing;
@@ -30,7 +29,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             filenames = new GeoCollection<string>();
             filenames.Add("ShortestPath", "ShortestPath");
             filenames.Add("FastestPath", "FastestPath");
-            filenames.Add("AustinWithOneWayRoad", "AustinWithOneWayRoad");
+            filenames.Add("DallasWithOneWayRoad", "DallasWithOneWayRoad");
             filenames.Add("OptimizeHighway", "OptimizeHighway");
             cmbPurpose.DataSource = filenames.GetKeys();
             RtgRoutingSource.BuildingRoutingData += new EventHandler<BuildingRoutingDataRtgRoutingSourceEventArgs>(RtgRoutingSource_BuildingRoadData);
@@ -53,11 +52,11 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             FeatureSource featureSource = null;
             switch (cmbPurpose.Text.Trim())
             {
-                case "AustinWithOneWayRoad":
-                    featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "AustinWithOneWayRoad.shp"));
+                case "DallasWithOneWayRoad":
+                    featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasWithOneWayRoad.shp"));
                     break;
                 default:
-                    featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "Austinstreets.shp"));
+                    featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
                     break;
             }
             return featureSource;
@@ -70,7 +69,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
                 case "FastestPath":
                     FastestPath(e);
                     break;
-                case "AustinWithOneWayRoad":
+                case "DallasWithOneWayRoad":
                     OneWayRoad(e);
                     break;
                 case "OptimizeHighway":
@@ -139,15 +138,15 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.763384, 30.299707, -97.712382, 30.259309);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.9055649057617, 32.9262169589844, -96.6515060678711, 32.7449425449219);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
             InMemoryFeatureLayer routingExtentLayer = new InMemoryFeatureLayer();
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle = new AreaStyle(new GeoPen(GeoColor.SimpleColors.Green));
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
-            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.815409, 30.369949, -97.657999, 30.217922)));
+            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.080185, 33.013491, -96.465213, 32.490127)));
             LayerOverlay routingOverlay = new LayerOverlay();
             routingOverlay.Layers.Add("RoutingExtentLayer", routingExtentLayer);
             winformsMap1.Overlays.Add("RoutingOverlay", routingOverlay);

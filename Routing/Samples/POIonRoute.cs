@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-using ThinkGeo.MapSuite;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
 using ThinkGeo.MapSuite.Routing;
@@ -26,9 +25,9 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void UserControl_Load(object sender, EventArgs e)
         {
-            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "Austinstreets.shp"));
+            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
 
-            RoutingSourceForShortest = new RtgRoutingSource(Path.Combine(rootPath, "Austinstreets.rtg"));
+            RoutingSourceForShortest = new RtgRoutingSource(Path.Combine(rootPath, "DallasCounty-4326.rtg"));
             routingEngine = new RoutingEngine(RoutingSourceForShortest, featureSource);
 
             RenderMap();
@@ -38,12 +37,12 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.7566, 30.3048, -97.7206, 30.2764);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.905564, 32.926216, -96.651506, 32.744942);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
-            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "Austinstreets.shp"));
+            ShapeFileFeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
             featureSource.Open();
             RoutingLayer routingLayer = new RoutingLayer();
             routingLayer.StartPoint = featureSource.GetFeatureById(txtStartId.Text, ReturningColumnsType.NoColumns).GetShape().GetCenterPoint();
@@ -64,7 +63,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             InMemoryFeatureLayer routingExtentLayer = new InMemoryFeatureLayer();
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle = new AreaStyle(new GeoPen(GeoColor.SimpleColors.Green));
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
-            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.7926, 30.3332, -97.6846, 30.248)));
+            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.080185, 33.013491, -96.465213, 32.490127)));
             routingOverlay.Layers.Add("RoutingExtentLayer", routingExtentLayer);
 
             winformsMap1.Refresh();
@@ -198,7 +197,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtStartId.Name = "txtStartId";
             this.txtStartId.Size = new System.Drawing.Size(130, 20);
             this.txtStartId.TabIndex = 1;
-            this.txtStartId.Text = "4636";
+            this.txtStartId.Text = "178813";
             // 
             // label2
             // 
@@ -216,7 +215,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtEndId.Name = "txtEndId";
             this.txtEndId.Size = new System.Drawing.Size(130, 20);
             this.txtEndId.TabIndex = 2;
-            this.txtEndId.Text = "7516";
+            this.txtEndId.Text = "51928";
             // 
             // label1
             // 

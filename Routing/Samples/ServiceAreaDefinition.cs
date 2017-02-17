@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using ThinkGeo.MapSuite;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
 using ThinkGeo.MapSuite.Routing;
@@ -34,8 +33,8 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void Route()
         {
-            RtgRoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "Austinstreets.rtg"));
-            FeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "Austinstreets.shp"));
+            RtgRoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "DallasCounty-4326.shortest.rtg"));
+            FeatureSource featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
             RoutingEngine routingEngine = new RoutingEngine(routingSource, featureSource);
 
             float averageSpeed = float.Parse(txtAverageSpeed.Text);
@@ -74,13 +73,13 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.7589906891967, 30.291409034941, -97.6954759797241, 30.2460904314254);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.905564, 32.926216, -96.651506, 32.744942);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
-            ShapeFileFeatureLayer austinstreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "Austinstreets.shp"));
-            austinstreetsLayer.Open();
+            ShapeFileFeatureLayer streetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "DallasCounty-4326.shp"));
+            streetsLayer.Open();
             InMemoryFeatureLayer routingLayer = new InMemoryFeatureLayer();
             routingLayer.ZoomLevelSet.ZoomLevel01.DefaultPointStyle = PointStyles.CreateSimpleStarStyle(GeoColor.SimpleColors.Red, 30);
             routingLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle.FillSolidBrush = new GeoSolidBrush(GeoColor.FromArgb(100, GeoColor.StandardColors.Blue));
@@ -93,14 +92,14 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             InMemoryFeatureLayer routingExtentLayer = new InMemoryFeatureLayer();
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle = new AreaStyle(new GeoPen(GeoColor.SimpleColors.Green));
             routingExtentLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
-            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.815409, 30.369949, -97.657999, 30.217922)));
+            routingExtentLayer.InternalFeatures.Add(new Feature(new RectangleShape(-97.080185, 33.013491, -96.465213, 32.490127)));
             routingOverlay.Layers.Add("RoutingExtentLayer", routingExtentLayer);
 
-            austinstreetsLayer.Open();
-            Feature startRoad = austinstreetsLayer.FeatureSource.GetFeatureById(txtStartId.Text, ReturningColumnsType.NoColumns);
+            streetsLayer.Open();
+            Feature startRoad = streetsLayer.FeatureSource.GetFeatureById(txtStartId.Text, ReturningColumnsType.NoColumns);
             Feature startPoint = new Feature(startRoad.GetShape().GetCenterPoint().GetWellKnownBinary(), txtStartId.Text);
             routingLayer.InternalFeatures.Add(txtStartId.Text, startPoint);
-            austinstreetsLayer.Close();
+            streetsLayer.Close();
 
             winformsMap1.Refresh();
         }
@@ -235,7 +234,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtStartId.Name = "txtStartId";
             this.txtStartId.Size = new System.Drawing.Size(114, 20);
             this.txtStartId.TabIndex = 12;
-            this.txtStartId.Text = "7700";
+            this.txtStartId.Text = "178813";
             // 
             // label2
             // 

@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using ThinkGeo.MapSuite;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
 using ThinkGeo.MapSuite.Routing;
@@ -33,8 +32,8 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void UserControl_Load(object sender, EventArgs e)
         {
-            featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath,"Austinstreets.shp"));
-            routingSource = new RtgRoutingSource(Path.Combine(rootPath, "Austinstreets.rtg"));
+            featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasCounty-4326.shp"));
+            routingSource = new RtgRoutingSource(Path.Combine(rootPath, "DallasCounty-4326.shortest.rtg"));
             routingEngine = new RoutingEngine(routingSource, featureSource);
 
             featureSource.Open();
@@ -296,10 +295,10 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
-            winformsMap1.CurrentExtent = new RectangleShape(-97.7538904234009, 30.2818254285889, -97.7380117460327, 30.2704957777);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.905564, 32.926216, -96.651506, 32.744942);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
             routingLayer = new RoutingLayer();
             string[] startCoordinates = txtStartPoint.Text.Split(',');
@@ -537,7 +536,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtStartPoint.Name = "txtStartPoint";
             this.txtStartPoint.Size = new System.Drawing.Size(125, 20);
             this.txtStartPoint.TabIndex = 1;
-            this.txtStartPoint.Text = "-97.7514657,30.2779630";
+            this.txtStartPoint.Text = "-96.736022,32.860551";
             // 
             // label2
             // 
@@ -555,7 +554,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             this.txtEndPoint.Name = "txtEndPoint";
             this.txtEndPoint.Size = new System.Drawing.Size(124, 20);
             this.txtEndPoint.TabIndex = 2;
-            this.txtEndPoint.Text = "-97.7438911,30.2735427";
+            this.txtEndPoint.Text = "-96.842102,32.755379";
             // 
             // label1
             // 

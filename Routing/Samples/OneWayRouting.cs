@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using ThinkGeo.MapSuite;
 using ThinkGeo.MapSuite.Drawing;
 using ThinkGeo.MapSuite.Layers;
 using ThinkGeo.MapSuite.Routing;
@@ -20,7 +19,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         {
             InitializeComponent();
 
-            featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "AustinWithOneWayRoad.shp"));
+            featureSource = new ShapeFileFeatureSource(Path.Combine(rootPath, "DallasWithOneWayRoad.shp"));
         }
 
         private void UserControl_Load(object sender, EventArgs e)
@@ -47,7 +46,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
 
         private void ShowTheShortestPath(RoutingLayer routingLayer)
         {
-            RoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "AustinWithOneWayRoad.rtg"));
+            RoutingSource routingSource = new RtgRoutingSource(Path.Combine(rootPath, "DallasWithOneWayRoad.rtg"));
             RoutingEngine routingEngine = new RoutingEngine(routingSource, featureSource);
             RoutingResult routingResult = routingEngine.GetRoute(txtStartId.Text, txtEndId.Text);
 
@@ -61,17 +60,17 @@ namespace ThinkGeo.MapSuite.RoutingSamples
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromHtml("#e6e5d1"));
             winformsMap1.CurrentExtent = new RectangleShape(-97.7649196668701, 30.3019741827087, -97.749040989502, 30.2906445318298);
 
-            WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitsOverlay);
+            WorldStreetsAndImageryOverlay worldStreetsAndImageryOverlay = new WorldStreetsAndImageryOverlay();
+            winformsMap1.Overlays.Add(worldStreetsAndImageryOverlay);
 
-            ShapeFileFeatureLayer austinstreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "AustinWithOneWayRoad.shp"));
-            austinstreetsLayer.Open();
+            ShapeFileFeatureLayer dallasStreetsLayer = new ShapeFileFeatureLayer(Path.Combine(rootPath, "DallasWithOneWayRoad.shp"));
+            dallasStreetsLayer.Open();
             
             RoutingLayer routingLayer = new RoutingLayer();
-            austinstreetsLayer.Open();
-            routingLayer.StartPoint = austinstreetsLayer.FeatureSource.GetFeatureById(txtStartId.Text, ReturningColumnsType.NoColumns).GetShape().GetCenterPoint();
-            routingLayer.EndPoint = austinstreetsLayer.FeatureSource.GetFeatureById(txtEndId.Text, ReturningColumnsType.NoColumns).GetShape().GetCenterPoint();
-            austinstreetsLayer.Close();
+            dallasStreetsLayer.Open();
+            routingLayer.StartPoint = dallasStreetsLayer.FeatureSource.GetFeatureById(txtStartId.Text, ReturningColumnsType.NoColumns).GetShape().GetCenterPoint();
+            routingLayer.EndPoint = dallasStreetsLayer.FeatureSource.GetFeatureById(txtEndId.Text, ReturningColumnsType.NoColumns).GetShape().GetCenterPoint();
+            dallasStreetsLayer.Close();
             LayerOverlay routingOverlay = new LayerOverlay();
             routingOverlay.Layers.Add("RoutingLayer", routingLayer);
             winformsMap1.Overlays.Add("RoutingOverlay", routingOverlay);

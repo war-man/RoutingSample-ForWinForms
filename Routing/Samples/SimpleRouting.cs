@@ -66,7 +66,7 @@ namespace ThinkGeo.MapSuite.RoutingSamples
         private void RenderMap()
         {
             winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
-            winformsMap1.CurrentExtent = new RectangleShape(-96.9055649057617, 32.9262169589844, -96.6515060678711, 32.7449425449219);
+            winformsMap1.CurrentExtent = new RectangleShape(-96.905564, 32.926216, -96.651506, 32.744942);
 
             //WorldMapKitWmsDesktopOverlay worldMapKitsOverlay = new WorldMapKitWmsDesktopOverlay();
             //winformsMap1.Overlays.Add(worldMapKitsOverlay);

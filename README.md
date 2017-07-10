@@ -16,9 +16,26 @@ This sample makes use of the following NuGet Packages
 [MapSuite 10.0.0](https://www.nuget.org/packages?q=ThinkGeo)
 
 ### About the Code
+```csharp
+Feature feature = featureSource.GetFeatureById(roadId, ReturningColumnsType.NoColumns);
 
-Working...
+LineBaseShape sourceShape = (LineBaseShape)feature.GetShape();
+Collection<LineShape> lines = ConvertLineBaseShapeToLines(sourceShape);
 
+List<string> adjacentIDs = new List<string>();
+foreach (LineShape line in lines)
+{
+    Collection<Feature> features = featureSource.GetFeaturesInsideBoundingBox(line.GetBoundingBox(), ReturningColumnsType.NoColumns);
+    foreach (Feature tempFeature in features)
+    {
+        BaseShape tempShape = tempFeature.GetShape();
+        if (feature.Id != tempFeature.Id && line.Intersects(tempShape))
+        {
+            adjacentIDs.Add(tempFeature.Id);
+        }
+    }
+}
+```
 ### Getting Help
 
 [Map Suite Desktop for Winforms Wiki Resources](http://wiki.thinkgeo.com/wiki/map_suite_desktop_for_winforms)
@@ -32,7 +49,10 @@ Working...
 ### Key APIs
 This example makes use of the following APIs:
 
-Working...
+- [ThinkGeo.MapSuite.Shapes.Feature](http://wiki.thinkgeo.com/wiki/api/thinkgeo.mapsuite.shapes.feature)
+- [ThinkGeo.MapSuite.Shapes.LineBaseShape](http://wiki.thinkgeo.com/wiki/api/thinkgeo.mapsuite.shapes.linebaseshape)
+- [ThinkGeo.MapSuite.Layers.FeatureSource](http://wiki.thinkgeo.com/wiki/api/thinkgeo.mapsuite.layers.featuresource)
+- [ThinkGeo.MapSuite.Shapes.BaseShape](http://wiki.thinkgeo.com/wiki/api/thinkgeo.mapsuite.shapes.baseshape)
 
 ### About Map Suite
 Map Suite is a set of powerful development components and services for the .Net Framework.
